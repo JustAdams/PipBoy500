@@ -1,4 +1,4 @@
 
 
 # ignore liabilities
-./Music/*.mp3
+*.mp3
