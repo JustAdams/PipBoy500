@@ -4,12 +4,11 @@ from Radio import RadioDevice
 
 radio = RadioDevice()
 
-sg.ChangeLookAndFeel('GreenTan')
+backgroundColor = '#F0F0F0'
 sg.SetOptions(element_padding=(0, 0))
-
 screenSize = (800, 480) # -- Display size
 stdFontSize = 30 # -- Standard font size
-buttFontSize = 20 # -- Button font size
+buttFontSize = 25 # -- Button font size
 currTime = time.asctime( time.localtime(time.time()) )
 currTemp = 76
 currHumidity = 40
@@ -17,6 +16,11 @@ currPressure = 80
 radioActive = False
 envActive = False
 mapActive = False
+playButton = './ButtonGraphics/play.png'
+stopButton = './ButtonGraphics/stop.png'
+backButton = './ButtonGraphics/back.png'
+nextButton = './ButtonGraphics/next.png'
+
 
 # ------ Update the time and readings ------
 def updateAll():
@@ -37,12 +41,14 @@ def updateAll():
 def getRadioLayout():
     musicFrame =    [
                         [sg.Text('Playing: %s' %radio.currSongName, key='currSong', font=stdFontSize)],
-                        [sg.Button('Prev', button_color=('green', 'pink'), key='Prev'),
-                        sg.Button('Play', button_color=('green', 'pink'), key='Play'), sg.Button('Stop', button_color=('red', 'white'), key='Stop'), sg.Button('Next', button_color=('green', 'pink'), key='Next')],
+                        [sg.T(' ')],
+                        [sg.Button('', image_filename=backButton, button_color=(backgroundColor, backgroundColor), key='Prev'), sg.T(' '),
+                        sg.Button('', key='Play', image_filename=playButton, button_color=(backgroundColor, backgroundColor)), sg.T(' '), sg.Button('', image_filename=stopButton, button_color=(backgroundColor, backgroundColor), key='Stop'), sg.T(' '), sg.Button('', image_filename=nextButton, button_color=(backgroundColor, backgroundColor), key='Next')],
+                        [sg.T(' ')]
                     ]
     radioLayout =   [
                     [sg.Text('Username', font=('Arial', stdFontSize))],
-                    [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
+                    [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30),sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
                     [sg.Frame('Radio', musicFrame)],
                 ]
     return radioLayout
@@ -55,7 +61,7 @@ def getEnvironmentLayout():
                         ]
     environmentLayout = [
                             [sg.Text('Username', font=('Arial', stdFontSize))],
-                            [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
+                            [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30), sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
                             [sg.Frame('Environment', environmentFrame)],
                         ]
     return environmentLayout
@@ -64,7 +70,7 @@ def getMapLayout():
     mapLayout = [
                     [sg.Text('Map Window')],
                     [sg.Text('Username', font=('Arial', stdFontSize))],
-                    [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
+                    [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30), sg.Button('Return', button_color=('white', 'firebrick4'), key='Return')],
                 ]
     return mapLayout
 
@@ -73,16 +79,13 @@ def getMapLayout():
 layout =    [   
                 [sg.Text('Username', font=('Arial', stdFontSize))],
                 [sg.Text(currTime, key='clock', font=('Arial', buttFontSize))],
-                [sg.T()],
-                [sg.Button('Environment', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Environment')],
-                [sg.T()],
-                [sg.Button('Radio', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Radio')],
-                [sg.T()],
-                [sg.Button('Map', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Map')],
             ]
+
+for i in range(0, 12):
+    layout += [ [sg.T()], ]
+
 layout +=   [
-                [sg.T()],
-                [sg.Button('Exit', button_color=('white', 'firebrick4'), font=('Arial', buttFontSize), key='Exit')],
+                [sg.Button('Environment', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Environment'), sg.T(' ' * 5), sg.Button('Radio', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Radio'), sg.T(' ' * 5), sg.Button('Map', button_color=('white', 'blue'), font=('Arial', buttFontSize), key='Map'), sg.T(' ' * 50), sg.Button('Exit', button_color=('white', 'firebrick4'), font=('Arial', buttFontSize), key='Exit')],
             ]
 
 # ------ Window creation
@@ -148,7 +151,7 @@ while True:
         mapLayout = getMapLayout()
         mapWindow = sg.Window('Map', mapLayout, size=screenSize, no_titlebar=True)
         while mapActive:
-            mapEvent, mapValues = mapWindow.Read(timeout=1000)
+            mapEvent, mapValues = mapWindow.Read(timeout=500)
             updateAll()
             if mapEvent is not '__TIMEOUT__':
                 radio.playButtonNoise()

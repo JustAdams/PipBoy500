@@ -7,7 +7,8 @@ musicList = glob.glob('./Music/*.mp3')
 class RadioDevice:
 
     def __init__(self):
-        mixer.init(22050, -16, 2, 4096)
+        mixer.pre_init(22050, -16, 2, 1024)
+        mixer.init()
         self.songIndex = 0
         self.numSongs = len(musicList)
         mixer.music.load(musicList[self.songIndex])
