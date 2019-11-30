@@ -49,7 +49,7 @@ def updateAll():
 
 def getRadioLayout():
     musicFrame =    [
-                        [sg.Text('Playing: %s' %radio.currSongName, key='currSong',  font=('Arial', stdFontSize))],
+                        [sg.Text('Playing: %s' %radio.currSongName, key='currSong',  font=('Arial', 20))],
                         [sg.T(' ')],
                         [sg.T(' ')],
                         [sg.Button('', image_filename=backButton, button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, key='Prev'), sg.T(' '),
@@ -96,21 +96,22 @@ def getMapLayout():
     return mapLayout
 
 def getKeypadLayout():
-    keypadFrame =  [
+    keypadFrame =  [    
                         [sg.Text('Enter Passcode')],
                         [sg.T(' ' * 6), sg.Input(size=(25, 1), justification='right', key='input')],
+                        [sg.T()],
                         [sg.T(' ' * 10), sg.Button('1', font=('Arial', stdFontSize)), sg.Button('2', font=('Arial', stdFontSize)), sg.Button('3', font=('Arial', stdFontSize))],
                         [sg.T(' ' * 10), sg.Button('4', font=('Arial', stdFontSize)), sg.Button('5', font=('Arial', stdFontSize)), sg.Button('6', font=('Arial', stdFontSize))],
                         [sg.T(' ' * 10), sg.Button('7', font=('Arial', stdFontSize)), sg.Button('8', font=('Arial', stdFontSize)), sg.Button('9', font=('Arial', stdFontSize))],
-                        [sg.T(' ' * 7), sg.Button('Login'), sg.Button('0', font=('Arial', stdFontSize)), sg.Button('Clear')],
+                        [sg.T(' ' * 22), sg.Button('0', font=('Arial', stdFontSize))],
+                        [sg.T()],
+                        [sg.T(' ' * 5), sg.Button('Login', font=('Arial', buttFontSize)), sg.Button('Clear', font=('Arial', buttFontSize))],
                         [sg.Text(size=(15, 1), font=('Arial', 20), text_color='white', key='out')]
                     ]
-    keypadLayout = []
-    for i in range (0, 2):
-        keypadLayout += [ [sg.T()], ]
 
-    keypadLayout +=  [
-                        [sg.T(' ' * 65), sg.Frame('Keypad Login', keypadFrame, font=('Arial', stdFontSize))]
+    keypadLayout =  [   
+                        [sg.T()],
+                        [sg.T(' ' * 65), sg.Frame('Kobold Technology', keypadFrame, font=('Arial', buttFontSize))]
                     ]
     return keypadLayout
 
@@ -145,6 +146,7 @@ while True:
             elif loginEvent in '1234567890':
                 keys_entered = loginValues['input']
                 keys_entered += loginEvent
+                radio.playClickNoise()
             elif loginEvent == 'Login':
                 keys_entered = loginValues['input']
                 if users.get(keys_entered) is not None:
@@ -217,6 +219,7 @@ while True:
 
     # ------ Map Window Stuff ------
     if event == 'Map' and not mapActive:
+        radio.playSpeech('loading area')
         mapActive = True
         mapLayout = getMapLayout()
         mapWindow = sg.Window('Map', mapLayout, size=screenSize, no_titlebar=True)

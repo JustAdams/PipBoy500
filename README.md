@@ -4,6 +4,7 @@ Project to create a PipBoy in the style of the original Fallout games.
 
 Using PySimpleGui and a Raspberry Pi with touchscreen.
 Program sounds are handled using PyGame.
+Text-to-speech handled using gTTS(Google Text-to-Speech) library.
 
 ***NOTE***
 Program will not work unless you add at least one (1) mp3 file to the Music folder.

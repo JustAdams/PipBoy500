@@ -19,7 +19,6 @@ class RadioDevice:
         self.shutdownNoise = mixer.Sound('./SFX/shutdown.wav')
         self.buttonNoise = mixer.Sound('./SFX/beep.wav')
         self.clickNoise = mixer.Sound('./SFX/click.wav')
-        self.language = 'en'
 
     def playSong(self):
         mixer.music.play()
@@ -49,6 +48,7 @@ class RadioDevice:
     def playClickNoise(self):
         self.clickNoise.play()
 
+    # saves a given string as a .wav and plays it
     def playSpeech(self, inputText):
         tts = gTTS(inputText, lang='en')
         tts.save('tts.wav')
