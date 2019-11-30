@@ -106,7 +106,7 @@ def getKeypadLayout():
                         [sg.Text(size=(15, 1), font=('Arial', 20), text_color='white', key='out')]
                     ]
     keypadLayout = []
-    for i in range (0, 4):
+    for i in range (0, 2):
         keypadLayout += [ [sg.T()], ]
 
     keypadLayout +=  [
@@ -122,11 +122,11 @@ layout =    [
                 [sg.Text(currTime, key='clock', font=('Arial', buttFontSize))],
             ]
 
-for i in range(0, 12):
+for i in range(0, 10):
     layout += [ [sg.T()], ]
 
 layout +=   [
-                [sg.Button('Environment', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Environment'), sg.T(' ' * 5), sg.Button('Radio', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Radio'), sg.T(' ' * 5), sg.Button('Map', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Map'), sg.T(' ' * 50), sg.Button('', image_filename=(exitButton), button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Exit')],
+                [sg.Button('Environment', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Environment'), sg.T(' ' * 5), sg.Button('Radio', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Radio'), sg.T(' ' * 5), sg.Button('Map', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Map'), sg.Button('Logout', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, font=('Arial', buttFontSize), key='Logout'), sg.T(' ' * 30), sg.Button('', image_filename=(exitButton), button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Exit')],
             ]
 
 # ------ Window creation
@@ -151,6 +151,8 @@ while True:
                     username = users[keys_entered]
                     print(username + " has logged in")
                     loggedIn = True
+                    radio.playSpeech("Welcome " + username)
+                    keypadWindow.hide()
                     break
                 else:
                     keys_entered = ''
@@ -172,6 +174,7 @@ while True:
     
     # ------ Environment Window Stuff ------
     if event == 'Environment' and not envActive:
+        radio.playSpeech('Scanning environment')
         envActive = True
         environmentLayout = getEnvironmentLayout()
         environmentWindow = sg.Window('Environment', environmentLayout, size=screenSize, no_titlebar=True)
@@ -226,5 +229,10 @@ while True:
                 mapWindow.Hide()
                 mapActive = False
                 break
+    
+    # ------ Logout ------
+    if event == 'Logout' and loggedIn:
+        radio.playSpeech('Goodbye ' + username)
+        loggedIn = False
 
 window.close()

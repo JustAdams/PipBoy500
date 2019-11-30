@@ -1,5 +1,7 @@
 from pygame import mixer # ------ Music player
 import glob
+from gtts import gTTS
+import os
 
 # makes a list of music files
 musicList = glob.glob('./Music/*.mp3')
@@ -7,7 +9,7 @@ musicList = glob.glob('./Music/*.mp3')
 class RadioDevice:
 
     def __init__(self):
-        mixer.pre_init(22050, -16, 2, 1024)
+        mixer.pre_init(22050, -16, 3, 1024)
         mixer.init()
         self.songIndex = 0
         self.numSongs = len(musicList)
@@ -17,6 +19,7 @@ class RadioDevice:
         self.shutdownNoise = mixer.Sound('./SFX/shutdown.wav')
         self.buttonNoise = mixer.Sound('./SFX/beep.wav')
         self.clickNoise = mixer.Sound('./SFX/click.wav')
+        self.language = 'en'
 
     def playSong(self):
         mixer.music.play()
@@ -45,3 +48,8 @@ class RadioDevice:
     
     def playClickNoise(self):
         self.clickNoise.play()
+
+    def playSpeech(self, inputText):
+        tts = gTTS(inputText, lang='en')
+        tts.save('tts.wav')
+        os.system('mpg123 tts.wav')
