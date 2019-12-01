@@ -71,7 +71,8 @@ def getEnvironmentLayout():
     environmentLayout = [
                             [sg.Text(currTime, key='clock', font=stdFont), sg.T(' ' * 60), sg.Button('Return', font=buttFont, key='Return')],
                             [sg.T()],
-                            [sg.Text('Environment', font=stdFont)],
+                            [sg.Text('Environmental Scan', font=stdFont)],
+                            [sg.T()],
                             [sg.T()],
                             [sg.Text('Temperature: %d°' %currTemp, key='temperature', font=stdFont)],
                             [sg.T()],
@@ -80,7 +81,11 @@ def getEnvironmentLayout():
                             [sg.Text('Atm. Pressure: %d' %currPressure, key='pressure',  font=stdFont)],
                             [sg.T()],
                             [sg.Text('Results: %sRESULTS VARIABLE HERE')],
-                            [sg.T(' ' * 155), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
+                        ]
+    for i in range(0, 3):
+        environmentLayout += [ [sg.T()], ]
+    environmentLayout +=[
+                            [sg.T(' ' * 150), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
                         ]
     return environmentLayout
 
