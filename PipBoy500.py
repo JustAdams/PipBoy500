@@ -1,6 +1,6 @@
 import PySimpleGUI as sg # ------ GUI 
 import time
-from Radio import RadioDevice
+from SoundClass import RadioDevice
 
 radio = RadioDevice()
 
@@ -9,14 +9,14 @@ backgroundColor = '#F0F0F0'
 sg.change_look_and_feel(theme)
 sg.SetOptions(element_padding=(0, 0))
 screenSize = (800, 480) # -- Display size
-stdFontSize = 25 # -- Standard font size
-buttFontSize = 20 # -- Button font size
+stdFont = ('Tlwg Mono', 20) # -- Standard font size
+buttFont = ('Tlwg Mono', 20) # -- Button font size
 currTime = time.asctime( time.localtime(time.time()) )
 currTemp = 76
 currHumidity = 40
 currPressure = 80
 loggedIn = False
-username = '               '
+username = '                           '
 radioActive = False
 envActive = False
 mapActive = False
@@ -28,7 +28,6 @@ nextButton = './ButtonGraphics/next.png'
 exitButton = './ButtonGraphics/exit.png'
 weatherMan = './Graphics/weather.png'
 mapArea = './Graphics/fxbg.png'
-
 
 # ------ Update the time and readings ------
 def updateAll():
@@ -48,86 +47,85 @@ def updateAll():
     
 
 def getRadioLayout():
-    musicFrame =    [
-                        [sg.Text('Playing: %s' %radio.currSongName, key='currSong',  font=('Arial', 20))],
-                        [sg.T(' ')],
-                        [sg.T(' ')],
-                        [sg.Button('', image_filename=backButton, button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, key='Prev'), sg.T(' '),
-                        sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  key='Play', image_filename=playButton), sg.T(' '), sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, image_filename=stopButton,   key='Stop'), sg.T(' '), sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  image_filename=nextButton,   key='Next')],
-                        [sg.T(' ')]
-                    ]
     radioLayout =   [
-                        [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30),sg.Button('Return',  key='Return')],
+                        [sg.Text(currTime, key='clock', font=stdFont), sg.T(' ' * 60), sg.Button('Return', font=buttFont, key='Return')],
+                        [sg.T()],
+                        [sg.T()],
+                        [sg.T()],
+                        [sg.Text('Playing: %s' %radio.currSongName, key='currSong',  font=stdFont)],
                     ]
-    for i in range (0, 3):
+    for i in range (0, 5):
         radioLayout += [ [sg.T()], ]
-    
     radioLayout +=  [
-                        [sg.T(' ' * 1), sg.Frame('Radio', musicFrame, font=('Arial', stdFontSize))],
+                        [sg.T(' ' * 30), sg.Button('', image_filename=backButton, button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, key='Prev'), sg.T(' '),
+                        sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  key='Play', image_filename=playButton), sg.T(' '), sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, image_filename=stopButton,   key='Stop'), sg.T(' '), sg.Button('', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  image_filename=nextButton,   key='Next')],
+                        [sg.T()],
+                        [sg.T()],
+                        [sg.T()],
+                        [sg.T(' ' * 150), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
                     ]
     return radioLayout
 
 def getEnvironmentLayout():
-    environmentFrame =  [
-                            [sg.T()],
-                            [sg.Text('Temperature: %d°' %currTemp, key='temperature', font=('Arial', stdFontSize))],
-                            [sg.T()],
-                            [sg.Text('Humidity: %d' %currHumidity, key='humidity',  font=('Arial', stdFontSize)), sg.T(' ' * 10)],
-                            [sg.T()],
-                            [sg.Text('Atm. Pressure: %d' %currPressure, key='pressure',  font=('Arial', stdFontSize))],
-                            [sg.T()],
-                        ]
+
     environmentLayout = [
-                            [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30), sg.Button('Return', key='Return')],
-                        ]
-    for i in range (0, 5):
-        environmentLayout += [ [sg.T()], ]
-    
-    environmentLayout +=[
-                            [sg.T(' ' * 25), sg.Frame('Environment', environmentFrame, font=('Arial', stdFontSize))]
+                            [sg.Text(currTime, key='clock', font=stdFont), sg.T(' ' * 60), sg.Button('Return', font=buttFont, key='Return')],
+                            [sg.T()],
+                            [sg.Text('Environment', font=stdFont)],
+                            [sg.T()],
+                            [sg.Text('Temperature: %d°' %currTemp, key='temperature', font=stdFont)],
+                            [sg.T()],
+                            [sg.Text('Humidity: %d' %currHumidity, key='humidity',  font=stdFont), sg.T(' ' * 10)],
+                            [sg.T()],
+                            [sg.Text('Atm. Pressure: %d' %currPressure, key='pressure',  font=stdFont)],
+                            [sg.T()],
+                            [sg.Text('Results: %sRESULTS VARIABLE HERE')],
+                            [sg.T(' ' * 155), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
                         ]
     return environmentLayout
 
 def getMapLayout():
     mapLayout = [
-                    [sg.Text(currTime, key='clock', font=('Arial', stdFontSize)), sg.T(' ' * 30), sg.Button('Return', key='Return')],
+                    [sg.Text(currTime, key='clock', font=stdFont), sg.T(' ' * 60), sg.Button('Return', font=buttFont, key='Return')],
                     [sg.Image(mapArea)],
+                    [sg.T(' ' * 150), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
                 ]
     return mapLayout
 
 def getKeypadLayout():
     keypadFrame =  [    
-                        [sg.Text('Enter Passcode')],
-                        [sg.T(' ' * 6), sg.Input(size=(25, 1), justification='right', key='input')],
                         [sg.T()],
-                        [sg.T(' ' * 10), sg.Button('1', font=('Arial', stdFontSize)), sg.Button('2', font=('Arial', stdFontSize)), sg.Button('3', font=('Arial', stdFontSize))],
-                        [sg.T(' ' * 10), sg.Button('4', font=('Arial', stdFontSize)), sg.Button('5', font=('Arial', stdFontSize)), sg.Button('6', font=('Arial', stdFontSize))],
-                        [sg.T(' ' * 10), sg.Button('7', font=('Arial', stdFontSize)), sg.Button('8', font=('Arial', stdFontSize)), sg.Button('9', font=('Arial', stdFontSize))],
-                        [sg.T(' ' * 22), sg.Button('0', font=('Arial', stdFontSize))],
+                        [sg.T(' ' * 4), sg.Text('Enter Passcode', font=('Tlwg', 10))],
+                        [sg.T(' ' * 5), sg.Input(size=(25, 1), justification='right', key='input')],
                         [sg.T()],
-                        [sg.T(' ' * 5), sg.Button('Login', font=('Arial', buttFontSize)), sg.Button('Clear', font=('Arial', buttFontSize))],
+                        [sg.T(' ' * 10), sg.Button('1', font=stdFont), sg.Button('2', font=stdFont), sg.Button('3', font=stdFont)],
+                        [sg.T(' ' * 10), sg.Button('4', font=stdFont), sg.Button('5', font=stdFont), sg.Button('6', font=stdFont)],
+                        [sg.T(' ' * 10), sg.Button('7', font=stdFont), sg.Button('8', font=stdFont), sg.Button('9', font=stdFont)],
+                        [sg.T(' ' * 22), sg.Button('0', font=stdFont)],
+                        [sg.T()],
+                        [sg.T(' '), sg.Button('Login', font=buttFont), sg.Button('Clear', font=buttFont)],
                         [sg.Text(size=(15, 1), font=('Arial', 20), text_color='white', key='out')]
                     ]
 
     keypadLayout =  [   
                         [sg.T()],
-                        [sg.T(' ' * 65), sg.Frame('Kobold Technology', keypadFrame, font=('Arial', buttFontSize))]
+                        [sg.T(' ' * 65), sg.Frame('Kobold Technologies', keypadFrame, font=('Tlwg Mono', 15 )), sg.T(' ' * 20)]
                     ]
     return keypadLayout
 
 # ------ Layout Mapping ------
 
 layout =    [   
-                [sg.T()],
-                [sg.Text(username, key='username', font=('Arial', stdFontSize))],
-                [sg.Text(currTime, key='clock', font=('Arial', buttFontSize))],
+                [sg.Text(username, key='username', font=stdFont)],
+                [sg.Text(currTime, key='clock', font=buttFont)],
             ]
 
-for i in range(0, 10):
+for i in range(0, 13):
     layout += [ [sg.T()], ]
 
 layout +=   [
-                [sg.Button('Environment', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Environment'), sg.T(' ' * 5), sg.Button('Radio', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Radio'), sg.T(' ' * 5), sg.Button('Map', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Map'), sg.Button('Logout', button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0, font=('Arial', buttFontSize), key='Logout'), sg.T(' ' * 30), sg.Button('', image_filename=(exitButton), button_color=('white', sg.LOOK_AND_FEEL_TABLE[theme]['BACKGROUND']), border_width=0,  font=('Arial', buttFontSize), key='Exit')],
+                [sg.Button('Environment', border_width=2, font=buttFont, key='Environment'), sg.T(' ' * 5), sg.Button('Radio', border_width=2,  font=buttFont, key='Radio'), sg.T(' ' * 5), sg.Button('Map', border_width=2,  font=buttFont, key='Map'), sg.T(' ' * 5), sg.Button('Morale', border_width=2, font=buttFont, key='Motivation'), sg.T(' ' * 15), sg.Button('Logout', button_color=('red', 'black'), border_width=2, font=buttFont, key='Logout'), sg.T(' ' * 30)],
+                [sg.T(' ' * 150), sg.T('Kobold Technologies', font=('Tlwg Mono', 10))]
             ]
 
 # ------ Window creation
@@ -143,12 +141,14 @@ while True:
             loginEvent, loginValues = keypadWindow.Read(timeout=1000)
             if loginEvent == 'Clear':
                 keys_entered = ''
+                radio.playClickNoise()
             elif loginEvent in '1234567890':
                 keys_entered = loginValues['input']
                 keys_entered += loginEvent
                 radio.playClickNoise()
             elif loginEvent == 'Login':
                 keys_entered = loginValues['input']
+                radio.playButtonNoise()
                 if users.get(keys_entered) is not None:
                     username = users[keys_entered]
                     print(username + " has logged in")
@@ -159,6 +159,10 @@ while True:
                 else:
                     keys_entered = ''
                     keypadWindow['out'].update('invalid login')
+            elif loginEvent is None or loginEvent == 'Exit': # ------ Close out of the program
+                radio.playShutdown()
+                time.sleep(1)
+                exit()
 
             keypadWindow['input'].update(keys_entered)
 
@@ -166,10 +170,6 @@ while True:
     # ------- Read and update window -------
     event, values = window.Read(timeout=1000) # ------ Update window every second
     updateAll() # Update readings
-    if event is None or event == 'Exit': # ------ Close out of the program
-        radio.playShutdown()
-        time.sleep(1)
-        break
 
     if event is not '__TIMEOUT__':
         radio.playButtonNoise()
@@ -219,7 +219,7 @@ while True:
 
     # ------ Map Window Stuff ------
     if event == 'Map' and not mapActive:
-        radio.playSpeech('loading area')
+        radio.playSpeech('loading map')
         mapActive = True
         mapLayout = getMapLayout()
         mapWindow = sg.Window('Map', mapLayout, size=screenSize, no_titlebar=True)
@@ -232,7 +232,11 @@ while True:
                 mapWindow.Hide()
                 mapActive = False
                 break
-    
+
+    # ------ Morale Quotes ------
+    if event == 'Motivation':
+        radio.playMotivation()
+        
     # ------ Logout ------
     if event == 'Logout' and loggedIn:
         radio.playSpeech('Goodbye ' + username)

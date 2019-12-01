@@ -2,6 +2,7 @@ from pygame import mixer # ------ Music player
 import glob
 from gtts import gTTS
 import os
+import random
 
 # makes a list of music files
 musicList = glob.glob('./Music/*.mp3')
@@ -19,6 +20,8 @@ class RadioDevice:
         self.shutdownNoise = mixer.Sound('./SFX/shutdown.wav')
         self.buttonNoise = mixer.Sound('./SFX/beep.wav')
         self.clickNoise = mixer.Sound('./SFX/click.wav')
+        with open('motivation.txt', 'r') as f:
+            self.motivationList = f.read().splitlines()
 
     def playSong(self):
         mixer.music.play()
@@ -53,3 +56,7 @@ class RadioDevice:
         tts = gTTS(inputText, lang='en')
         tts.save('tts.wav')
         os.system('mpg123 tts.wav')
+
+    def playMotivation(self):
+        randQuote = random.choice(self.motivationList)
+        self.playSpeech(randQuote)
