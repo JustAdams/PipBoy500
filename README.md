@@ -19,6 +19,20 @@ gTTS
 https://gtts.readthedocs.io/en/latest/
 ```
 
+# Login Screen
+![Login Screen](https://github.com/KoboldAdvocate/PipBoy500/blob/master/login.PNG)
+
+# Main Screen
+![Main Screen](https://github.com/KoboldAdvocate/PipBoy500/blob/master/main.PNG)
+
+# Device without attached Sense HAT
+Rubber duck for scale
+
+![Environment Screen](https://github.com/KoboldAdvocate/PipBoy500/blob/master/irl1.jpg)
+
+
+
+
 Completed:  
 	* Radio Player
 		Upload any amount of .mp3 files to the Music folder and the program automatically updates its song list on instantiation. Currently can only Play, Stop, and Skip to the next song. Volume is set to the systems volume.
